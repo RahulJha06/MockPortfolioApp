@@ -41,7 +41,6 @@ class _InternalState extends State<ManagePortfolio> {
           title: Text('Create Portfolio'),
         ),
         body: SlidingUpPanel(
-          maxHeight: 700,
           borderRadius: BorderRadius.circular(10),
           color: Color(0xFFFFFFFF),
           margin: EdgeInsets.symmetric(horizontal: 2),
@@ -121,14 +120,20 @@ class _InternalState extends State<ManagePortfolio> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Sort&Filter',
-                                style: TextStyle(fontSize: 12),
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  'Sort&Filter',
+                                  style: TextStyle(fontSize: 12),
+                                ),
                               ),
-                              Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                              )
+                              Expanded(
+                                flex: 1,
+                                child: Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 20,
+                                ),
+                              ),
                             ],
                           ),
                           onPressed: () {
@@ -162,7 +167,10 @@ class _InternalState extends State<ManagePortfolio> {
     );
   }
 
-  Widget _buildListComponentAction(BuildContext currentContext, Company C) {
+  Widget actions;
+
+  Widget _buildListComponentAction(
+      BuildContext currentContext, Company C, Color _tileColor) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -177,6 +185,10 @@ class _InternalState extends State<ManagePortfolio> {
                         color: Colors.green,
                         style: BorderStyle.solid)),
                 onPressed: () {
+                  setState(() {
+                    actions:
+                    Text("Bought");
+                  });
                   Provider.of<ShortList>(currentContext, listen: false)
                       .addToList(C, "buy");
                 },
@@ -192,6 +204,10 @@ class _InternalState extends State<ManagePortfolio> {
                       style: BorderStyle.solid, color: Colors.red, width: 2),
                 ),
                 onPressed: () {
+                  setState(() {
+                    actions:
+                    Text("Bought");
+                  });
                   Provider.of<ShortList>(currentContext, listen: false)
                       .addToList(C, "sell");
                 },
@@ -203,9 +219,10 @@ class _InternalState extends State<ManagePortfolio> {
   }
 
   Widget _buildListView(BuildContext currentContext, Company data) {
+    Color color = Color(0XAAE0E0E0);
     return Container(
       decoration: BoxDecoration(
-        color: Color(0XAAE0E0E0),
+        color: color,
         border: Border.all(color: Color(0xAAE0E0E0)),
         borderRadius: BorderRadius.circular(20),
       ),
@@ -231,7 +248,7 @@ class _InternalState extends State<ManagePortfolio> {
           ),
         ),
         isThreeLine: true,
-        trailing: _buildListComponentAction(currentContext, data),
+        trailing: _buildListComponentAction(currentContext, data, color),
       ),
     );
   }

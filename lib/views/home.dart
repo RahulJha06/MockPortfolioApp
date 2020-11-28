@@ -7,30 +7,15 @@ import 'package:portfolio_monitor/views/protfolio_edit.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
-  @override  State<StatefulWidget> createState() => _InternalState();
-
+  @override
+  State<StatefulWidget> createState() => _InternalState();
 }
 
 class _InternalState extends State<Home> {
   Widget _decreasing = Icon(Icons.arrow_circle_down, color: Colors.red);
   Widget _increasing = Icon(Icons.arrow_circle_up, color: Colors.green);
-  double _profilePerformace = 0.0;
-  List<Widget> _values = <Widget>[];
-  @override
-  void initState() {
-    setState(() {
-      _profilePerformace = Provider.of<Portfolio>(context).portfolioPerformance;
-    });
-  }
-
-  @override
-  void didWidgetUpdate(Widget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    print("Here");
-    setState(() {
-      _profilePerformace = Provider.of<Portfolio>(context).portfolioPerformance;
-    });
-  }
+  List<Widget> _col1 = <Widget>[];
+  List<Widget> _col2 = <Widget>[];
 
   Widget _unitStockView(Company c) {
     double val = c.buyingPrice - c.currentPrice;
@@ -55,7 +40,12 @@ class _InternalState extends State<Home> {
   }
 
   Widget _buildInnerCard(List data) {
-    _values = data.map((c) => _unitStockView(c)).toList();
+    int i = 0;
+    _col1 = [];
+    for (; i < data.length / 2; i++) _col1.add(_unitStockView(data[i]));
+    int j = i;
+    _col2 = [];
+    for (; j < data.length; j++) _col2.add(_unitStockView(data[j]));
     return Container(
       child: Card(
         margin: EdgeInsets.all(20),
@@ -65,10 +55,10 @@ class _InternalState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Column(
-              children: _values,
+              children: _col1,
             ),
             Column(
-              children: _values,
+              children: _col2,
             )
           ],
         ),
@@ -104,7 +94,7 @@ class _InternalState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text('John Joe'),
-                  Text(_profilePerformace.toStringAsPrecision(3)),
+                  Text(portfolio.portfolioPerformance.toStringAsPrecision(3)),
                 ],
               ),
             ),
@@ -126,10 +116,6 @@ class _InternalState extends State<Home> {
         onPressed: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => ManagePortfolio()));
-          setState(() {
-            _profilePerformace = Provider.of<Portfolio>(context, listen: false)
-                .portfolioPerformance;
-          });
         },
       ),
     );

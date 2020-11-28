@@ -14,7 +14,6 @@ class Portfolio extends ChangeNotifier {
   double get portfolioPerformance {
     double value = 0.0;
     _portfolio.forEach((stock) {
-      double temp = 0.0;
       value += (stock.buyingPrice -
           NiftyCompanyProfileAPI.getCurrentPrice(stock.name));
     });

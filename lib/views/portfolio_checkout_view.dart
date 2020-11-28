@@ -29,7 +29,19 @@ class _InternalState extends State<CheckOut> {
   }
 
   Widget _buildListItem(CompanyAction C) {
+    Widget status;
+    if (C.company.change > 0)
+      status = Icon(Icons.arrow_drop_down_outlined, color: Colors.red);
+    else
+      status = Icon(Icons.arrow_drop_up_outlined, color: Colors.green);
+
+    Color color;
+    if (C.action == "buy")
+      color = Color(0xAAA2ED88);
+    else
+      color = Color(0xAAFCA18D);
     return Container(
+      color: color,
       margin: EdgeInsets.all(5),
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -61,9 +73,13 @@ class _InternalState extends State<CheckOut> {
     );
   }
 
-  List<Widget> _buildColumn(List<CompanyAction> data) {
-    List<Widget> _displayData = data.map((e) => _buildListItem(e)).toList();
-    return _displayData;
+  Widget _buildColumn(List<CompanyAction> data) {
+    return ListView.separated(
+        shrinkWrap: true,
+        separatorBuilder: (context, index) => Divider(),
+        itemCount: data.length,
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, index) => _buildListItem(data[index]));
   }
 
   Widget _body;
@@ -84,17 +100,20 @@ class _InternalState extends State<CheckOut> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Center(
-                heightFactor: 3,
-                child: Text(
-                  "John Doe(P1)",
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+              Expanded(
+                flex: 1,
+                child: Center(
+                  child: Text(
+                    "John Doe(P1)",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                  ),
                 ),
               ),
-              Container(
-                // padding: EdgeInsets.all(10),
-                child: Column(
-                  children: _buildColumn(
+              Expanded(
+                flex: 9,
+                child: Container(
+                  // height: 400,
+                  child: _buildColumn(
                       Provider.of<ShortList>(context, listen: false).shortList),
                 ),
               ),
@@ -105,6 +124,7 @@ class _InternalState extends State<CheckOut> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: RaisedButton(
+                color: Color(0xAAE0E0E0),
                 child: Text("Confirm"),
                 onPressed: () {
                   Portfolio portfolio =
