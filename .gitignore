@@ -1,3 +1,4 @@
+
 # Miscellaneous
 *.class
 *.log
@@ -9,6 +10,8 @@
 .history
 .svn/
 
+#Ios related
+.ios/
 # IntelliJ related
 *.iml
 *.ipr
